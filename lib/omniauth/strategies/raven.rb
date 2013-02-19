@@ -1,5 +1,4 @@
 require 'omniauth'
-require 'cgi'
 
 module OmniAuth
     module Strategies
@@ -16,6 +15,12 @@ module OmniAuth
 			minute = rfc3339[ 11..12 ].to_i
 			second = rfc3339[ 13..14 ].to_i
 			return Time.gm( year, month, day, hour, minute, second)
+		end
+
+		def escape(string)
+		  string.gsub(/([^ a-zA-Z0-9_.-]+)/) do
+		    '%' + $1.unpack('H2' * $1.bytesize).join('%').upcase
+		  end.tr(' ', '+')
 		end
 	end
 
