@@ -59,7 +59,7 @@ module OmniAuth
 			return fail!("invalid_protocol_version") unless ver == options[:raven_opt][:version]
 			
 			#Check the url
-			return fail!("mismatched urls", Exception.new("url: " + url + " vs callback: " + callback_url) ) unless url == callback_url
+			return fail!("mismatched urls", Exception.new("url: " + url + " vs callback: " + callback_url) ) unless url == callback_url.split('?').first
 		
 			#Check the time skew
 			issuetime = timeforRFC3339( issue )
