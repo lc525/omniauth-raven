@@ -1,6 +1,7 @@
 # Omniauth::Raven
 
-TODO: Write a gem description
+An OmniAuth provider for Raven, the University of Cambridge's 
+central web authentication service.
 
 ## Installation
 
@@ -18,12 +19,19 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add the strategy to your Gemfile, together with OmniAuth:
+```
+gem 'omniauth'
+gem 'omniauth-raven'
+```
 
-## Contributing
+To integrate the strategy with your middleware
+```
+use OmniAuth::Builder do
+    provider :raven, ENV['RAVEN_KEY'], ENV['RAVEN_SECRET']
+end
+```
+Currently, we do not use the two default parameters (key and secret),
+but they are required for forward compatibility.
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+For additional details, consult OniAuth's [[documentation|https://github.com/intridea/omniauth/wiki]]
