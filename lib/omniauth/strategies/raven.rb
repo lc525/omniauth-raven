@@ -50,42 +50,42 @@ module OmniAuth
 
 	    def callback_phase
 
-	    	return fail!(:invalid_response) if request.params['WLS-Response'] == ""
+	    	return fail!("null_response") if request.params['WLS-Response'] == ""
 		
 			wls_response = request.params['WLS-Response'].to_s
 			ver, status, msg, issue, id, url, principal, auth, sso, life, params, kid, sig = wls_response.split('!')
 
 			#Check the protocol version
-			return fail!(:invalid_response) unless ver == options[:raven_opt][:version]
+			return fail!("invalid_protocol_version") unless ver == options[:raven_opt][:version]
 			
 			#Check the url
-			return fail!(:invalid_response) unless url == callback_url
+			return fail!("mismatched urls", Exception "url: " + url + " vs callback: " + callback_url) unless url == callback_url
 		
 			#Check the time skew
 			issuetime = timeforRFC3339( issue )
 			skew = issuetime - Time.now
-			return fail!(:invalid_response) unless skew.abs < options[:raven_opt][:max_skew]
+			return fail!("time_skew") unless skew.abs < options[:raven_opt][:max_skew]
 
 			#Optionally check that interaction with the user took place
-			return fail!(:invalid_response) if ( iact == 'yes' &&  auth == "" )
+			return fail!(:invalid_response, Exception "No raven interaction took place, but it was requested") if ( iact == 'yes' &&  auth == "" )
 			
 			#Optionally check that this response matches a request
 			if @match_response_and_request
 				response_id = unescape( params )
 				request_id = session['request_id']
-				return fail!(:invalid_response) unless request_id == response_id
+				return fail!("mismatched_response", Exception "req_id:" + request_id + " vs resp_id:" + response_id) unless request_id == response_id
 			end
 			
 			#If we got here, and status is 200, then yield the principal
 			if status == '200'
 				#Check that the Key Id is one we currently accept
 				publickey = OmniAuth.raven_pubkey
-				return fail!(:invalid_response) unless kid == OmniAuth.raven_keyno
+				return fail!("invalid_keyno") unless kid == OmniAuth.raven_keyno
 				
 				#Check the signature
 				length_to_drop = -(sig.length + kid.length + 3)
 				signedbit = wls_response[ 0 .. length_to_drop]
-				return fail!(:invalid_response) unless publickey.verify( OpenSSL::Digest::SHA1.new, Base64.decode64(sig.tr('-._','+/=')), signedbit)	
+				return fail!("mismatched_signature") unless publickey.verify( OpenSSL::Digest::SHA1.new, Base64.decode64(sig.tr('-._','+/=')), signedbit)	
 
 				# Return the status
 				@name = principal
@@ -94,7 +94,7 @@ module OmniAuth
 				super
 			else
 				#And return the error code if it is something else.
-				return fail!(:invalid_credentials)
+				return fail!(:invalid_credentials, Exception "Raven status:" + status)
 			end
 			
 	    end
