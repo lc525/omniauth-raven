@@ -28,7 +28,7 @@ module OmniAuth
 
 	    	auth_url = options[:raven_opt][:url] << 
 	    			   "?ver="    << uriescape(options[:raven_opt][:version]) <<
-	    			   ";url="    << uriescape(callback_path) <<
+	    			   ";url="    << uriescape(callback_url) <<
 	    			   ";desc="   << uriescape(options[:raven_opt][:desc]) <<
 	    			   ";msg="    << uriescape(options[:raven_opt][:msg]) <<
 	    			   ";iact="   << uriescape(options[:raven_opt][:iact]) <<
