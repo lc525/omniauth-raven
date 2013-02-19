@@ -59,7 +59,7 @@ module OmniAuth
 			return fail!("invalid_protocol_version") unless ver == options[:raven_opt][:version]
 			
 			#Check the url
-			return fail!("mismatched urls", Exception "url: " + url + " vs callback: " + callback_url) unless url == callback_url
+			return fail!("mismatched urls", Exception.new("url: " + url + " vs callback: " + callback_url) ) unless url == callback_url
 		
 			#Check the time skew
 			issuetime = timeforRFC3339( issue )
@@ -67,13 +67,13 @@ module OmniAuth
 			return fail!("time_skew") unless skew.abs < options[:raven_opt][:max_skew]
 
 			#Optionally check that interaction with the user took place
-			return fail!(:invalid_response, Exception "No raven interaction took place, but it was requested") if ( iact == 'yes' &&  auth == "" )
+			return fail!(:invalid_response, Exception.new("No raven interaction took place, but it was requested") ) if ( iact == 'yes' &&  auth == "" )
 			
 			#Optionally check that this response matches a request
 			if @match_response_and_request
 				response_id = unescape( params )
 				request_id = session['request_id']
-				return fail!("mismatched_response", Exception "req_id:" + request_id + " vs resp_id:" + response_id) unless request_id == response_id
+				return fail!("mismatched_response", Exception.new("req_id:" + request_id + " vs resp_id:" + response_id) ) unless request_id == response_id
 			end
 			
 			#If we got here, and status is 200, then yield the principal
@@ -94,7 +94,7 @@ module OmniAuth
 				super
 			else
 				#And return the error code if it is something else.
-				return fail!(:invalid_credentials, Exception "Raven status:" + status)
+				return fail!(:invalid_credentials, Exception.new("Raven status:" + status) )
 			end
 			
 	    end
