@@ -67,7 +67,7 @@ module OmniAuth
 			return fail!("time_skew") unless skew.abs < options[:raven_opt][:max_skew]
 
 			#Optionally check that interaction with the user took place
-			return fail!(:invalid_response, Exception.new("No raven interaction took place, but it was requested") ) if ( iact == 'yes' &&  auth == "" )
+			return fail!(:invalid_response, Exception.new("No raven interaction took place, but it was requested") ) if ( options[:raven_opt][:iact] == 'yes' &&  auth == "" )
 			
 			#Optionally check that this response matches a request
 			if @match_response_and_request
