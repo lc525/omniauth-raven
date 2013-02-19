@@ -3,28 +3,6 @@ require 'omniauth'
 module OmniAuth
     module Strategies
 
-    # Two new methods are added to the Standard CGI class.
-	class CGI 
-		# Perhaps not a great place for this, but rfc3339 is an internet standard ....
-		# Takes a string with a time encoded according to rfc3339 and returns a Time object.
-		def timeforRFC3339( rfc3339 )
-			year = rfc3339[ 0..3 ].to_i
-			month = rfc3339[ 4..5 ].to_i
-			day = rfc3339[ 6..7 ].to_i
-			hour = rfc3339[ 9..10 ].to_i
-			minute = rfc3339[ 11..12 ].to_i
-			second = rfc3339[ 13..14 ].to_i
-			return Time.gm( year, month, day, hour, minute, second)
-		end
-
-		def escape(string)
-		  string.gsub(/([^ a-zA-Z0-9_.-]+)/) do
-		    '%' + $1.unpack('H2' * $1.bytesize).join('%').upcase
-		  end.tr(' ', '+')
-		end
-	end
-
-
 	class Raven
 	    include OmniAuth::Strategy
 	    
@@ -49,14 +27,14 @@ module OmniAuth
 			params = session['request_id'] = rand( 999999 ).to_s
 
 	    	auth_url = options[:raven_opt][:url] << 
-	    			   "?ver="    << CGI.escape(options[:raven_opt][:version]) <<
-	    			   ";url="    << CGI.escape(callback_path) <<
-	    			   ";desc="   << CGI.escape(options[:raven_opt][:desc]) <<
-	    			   ";msg="    << CGI.escape(options[:raven_opt][:msg]) <<
-	    			   ";iact="   << CGI.escape(options[:raven_opt][:iact]) <<
-	    			   ";aauth="  << CGI.escape(options[:raven_opt][:aauth]) <<
-	    			   ";params=" << CGI.escape(params) <<
-	    			   ";fail="   << CGI.escape(options[:raven_opt][:fail])
+	    			   "?ver="    << uriescape(options[:raven_opt][:version]) <<
+	    			   ";url="    << uriescape(callback_path) <<
+	    			   ";desc="   << uriescape(options[:raven_opt][:desc]) <<
+	    			   ";msg="    << uriescape(options[:raven_opt][:msg]) <<
+	    			   ";iact="   << uriescape(options[:raven_opt][:iact]) <<
+	    			   ";aauth="  << uriescape(options[:raven_opt][:aauth]) <<
+	    			   ";params=" << uriescape(params) <<
+	    			   ";fail="   << uriescape(options[:raven_opt][:fail])
 
 			return redirect auth_url
 	    end
@@ -82,6 +60,24 @@ module OmniAuth
 	    	options[:fields][:name] = @name
 	    	options[:fields][:email] = @email
 	    }
+
+	    private 
+
+	    def timeforRFC3339( rfc3339 )
+			year = rfc3339[ 0..3 ].to_i
+			month = rfc3339[ 4..5 ].to_i
+			day = rfc3339[ 6..7 ].to_i
+			hour = rfc3339[ 9..10 ].to_i
+			minute = rfc3339[ 11..12 ].to_i
+			second = rfc3339[ 13..14 ].to_i
+			return Time.gm( year, month, day, hour, minute, second)
+		end
+
+		def uriescape(string)
+		  string.gsub(/([^ a-zA-Z0-9_.-]+)/) do
+		    '%' + $1.unpack('H2' * $1.bytesize).join('%').upcase
+		  end.tr(' ', '+')
+		end
 	end
     end
 end
