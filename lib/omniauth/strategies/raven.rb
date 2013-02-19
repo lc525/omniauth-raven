@@ -3,7 +3,7 @@ require 'omniauth'
 module OmniAuth
 
 	def self.raven_pubkey
-		@raven_pubkey ||= File.read File.join( File.expand_path(File.dirname(__FILE__)) , 'pubkey2.pem')
+		@raven_pubkey ||= OpenSSL::PKey::RSA.new ( File.read File.join( File.expand_path(File.dirname(__FILE__)) , 'pubkey2.pem') )
 	end
 
 	def self.raven_keyno
