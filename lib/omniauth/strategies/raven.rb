@@ -55,7 +55,7 @@ module OmniAuth
 
 	    end
 
-	    uid  { :app_key }
+	    uid  { @email }
 	    info { 
 	    	{:name  => @name,
 	    	 :email => @email}
