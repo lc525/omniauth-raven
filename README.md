@@ -34,4 +34,4 @@ end
 Currently, we do not use the two default parameters (key and secret),
 but they are required for forward compatibility.
 
-For additional details, consult OniAuth's [documentation](https://github.com/intridea/omniauth/wiki)
+For additional details, consult OmniAuth's [documentation](https://github.com/intridea/omniauth/wiki)
