@@ -23,6 +23,8 @@ module OmniAuth
 	class Raven
 	    include OmniAuth::Strategy
 	    
+	    args [:app_key, :app_secret]
+
 	    option :fields, [:name, :email]
 	    option :uid_field, :email
 
