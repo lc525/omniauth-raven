@@ -1,4 +1,4 @@
-require 'omniauth/core'
+require 'omniauth'
 require 'cgi'
 
 module OmniAuth
@@ -53,6 +53,28 @@ module OmniAuth
 
 			return redirect auth_url
 	    end
+
+	    def callback_phase
+
+	    	return fail!(:invalid_response) if request.params['WLS-Response'] == ""
+		
+			wls_response = request.params['WLS-Response'].to_s
+			ver, status, msg, issue, id, url, principal, auth, sso, life, params, kid, sig = wls_response.split('!')
+
+			return fail!(:invalid_credentials) if status != "200"
+
+			@name = principal
+			@email = principal+"@cam.ac.uk"
+
+			super
+
+	    end
+
+	    uid  { @email }
+	    info { 
+	    	options[:fields][:name] = @name
+	    	options[:fields][:email] = @email
+	    }
 	end
     end
 end
