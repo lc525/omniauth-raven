@@ -32,7 +32,7 @@ module OmniAuth
 	        :desc => 'DTG Gitlab',
 	        :msg => 'You are required to authenticate with Raven to access Gitlab',
 	        :iact => '0',
-	        :aauth => ,
+	        :aauth => '',
 	        :fail => 'No',
 	        :max_skew => 90 #seconds
       	}
