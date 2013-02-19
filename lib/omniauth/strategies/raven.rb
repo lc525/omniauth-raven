@@ -26,15 +26,15 @@ module OmniAuth
 
 			params = session['request_id'] = rand( 999999 ).to_s
 
-	    	auth_url = options[:raven_opt][:url] << 
-	    			   "?ver="    << uriescape(options[:raven_opt][:version]) <<
-	    			   ";url="    << uriescape(callback_url) <<
-	    			   ";desc="   << uriescape(options[:raven_opt][:desc]) <<
-	    			   ";msg="    << uriescape(options[:raven_opt][:msg]) <<
-	    			   ";iact="   << uriescape(options[:raven_opt][:iact]) <<
-	    			   ";aauth="  << uriescape(options[:raven_opt][:aauth]) <<
-	    			   ";params=" << uriescape(params) <<
-	    			   ";fail="   << uriescape(options[:raven_opt][:fail])
+	    	auth_url = options[:raven_opt][:url] + 
+	    			   "?ver="    + uriescape(options[:raven_opt][:version]) +
+	    			   ";url="    + uriescape(callback_url) +
+	    			   ";desc="   + uriescape(options[:raven_opt][:desc]) +
+	    			   ";msg="    + uriescape(options[:raven_opt][:msg]) +
+	    			   ";iact="   + uriescape(options[:raven_opt][:iact]) +
+	    			   ";aauth="  + uriescape(options[:raven_opt][:aauth]) +
+	    			   ";params=" + uriescape(params) +
+	    			   ";fail="   + uriescape(options[:raven_opt][:fail])
 
 			return redirect auth_url
 	    end
