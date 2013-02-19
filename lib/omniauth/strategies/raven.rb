@@ -7,7 +7,7 @@ module OmniAuth
 	end
 
 	def self.raven_keyno
-		@raven_keyno = 2
+		@raven_keyno = '2'
 	end
 
     module Strategies
